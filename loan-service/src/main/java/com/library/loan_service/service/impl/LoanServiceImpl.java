@@ -34,7 +34,7 @@ public class LoanServiceImpl implements LoanService {
         log.info("Obteniendo información del cliente con id: {} y book id: {}", loanRequestDto.getCustomerId(), loanRequestDto.getBookId());
         CustomerResponseDto customerResponseDto = webClientBuilder.build()
                 .get()
-                .uri("http://localhost:8081/api/v1/customers/{id}", loanRequestDto.getCustomerId())
+                .uri("http://localhost:8080/api/v1/customers/{id}", loanRequestDto.getCustomerId())
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, response ->
                         Mono.error(new RuntimeException("Customer not found")))
@@ -44,7 +44,7 @@ public class LoanServiceImpl implements LoanService {
         // 2. Verificar que el libro existe y está disponible
         BookResponseDto bookResponseDto = webClientBuilder.build()
                 .get()
-                .uri("http://localhost:8083/api/v1/books/{id}", loanRequestDto.getBookId())
+                .uri("http://localhost:8080/api/v1/books/{id}", loanRequestDto.getBookId())
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, response -> Mono.error(new RuntimeException("Book not found")))
                 .bodyToMono(BookResponseDto.class)
